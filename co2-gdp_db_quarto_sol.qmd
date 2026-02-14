@@ -1,0 +1,164 @@
+---
+title: "CO2 & GDP Dashboard"
+format:
+  dashboard:
+    orientation: rows
+    scrolling: true
+include-in-header:
+  text: |
+    <style>
+    .bslib-value-box .value-box-value { font-size: 2rem !important; }
+    .bslib-value-box .value-box-title { font-size: 1.2rem !important; }
+    .bslib-value-box .value-box-showcase .bi { font-size: 2.6rem !important; }
+    </style>
+---
+
+```{python}
+#| output: false
+import pandas as pd
+import plotly.express as px
+
+# Data URLs
+url_co2gdp_data = 'https://drive.switch.ch/index.php/s/cxW0xrmQXdGL1VJ/download'
+url_geo_data = 'https://drive.switch.ch/index.php/s/bfb1TrwoIrXGAfM/download'
+
+# Load the dataset and filter to selected countries
+df_full = pd.read_csv(url_co2gdp_data)
+selected_countries = ['United States', 'China', 'Germany', 'Brazil', 'India', 'Nigeria', 'Australia', 'Saudi Arabia']
+df = df_full[df_full['country'].isin(selected_countries)].copy()
+
+years = sorted(df['year'].unique().tolist())
+min_year, max_year = min(years), max(years)
+selected_year = max_year
+year_data = df[df['year'] == selected_year]
+```
+
+## Row {height="120px"}
+
+```{python}
+#| content: valuebox
+#| title: "Countries"
+#| icon: globe
+#| color: primary
+dict(value=len(selected_countries))
+```
+
+```{python}
+#| content: valuebox
+#| title: "Year Range"
+#| icon: calendar-range
+#| color: primary
+dict(value=f"{min_year} – {max_year}")
+```
+
+```{python}
+#| content: valuebox
+#| title: "Data Points"
+#| icon: table
+#| color: primary
+dict(value=f"{len(df):,}")
+```
+
+## Row {height="400px"}
+
+### Column
+
+```{python}
+#| title: "CO2 Emissions Over Time"
+fig = px.line(
+    df.sort_values('year'), x='year', y='co2', color='country',
+    labels={"co2": "CO2 (metric tons per capita)", "year": "Year", "country": "Country"}
+)
+_ = fig.update_traces(line=dict(width=2))
+_ = fig.update_layout(legend=dict(title="", font=dict(size=9), orientation="h", yanchor="top", y=-0.2, xanchor="left", x=0, entrywidth=70, tracegroupgap=2, itemwidth=30))
+fig.show()
+```
+
+### Column
+
+```{python}
+#| title: "GDP Over Time"
+fig = px.line(
+    df.sort_values('year'), x='year', y='gdp', color='country',
+    labels={"gdp": "GDP (USD per capita)", "year": "Year", "country": "Country"}
+)
+_ = fig.update_traces(line=dict(width=2))
+_ = fig.update_layout(legend=dict(title="", font=dict(size=9), orientation="h", yanchor="top", y=-0.2, xanchor="left", x=0, entrywidth=70, tracegroupgap=2))
+fig.show()
+```
+
+## Row {height="200px"}
+
+### Column
+
+```{python}
+#| title: "CO2 Extremes"
+from itables import show
+co2_min_idx = df['co2'].idxmin()
+co2_max_idx = df['co2'].idxmax()
+co2_extremes = df.loc[[co2_min_idx, co2_max_idx], ['country', 'year', 'co2', 'gdp']].copy()
+co2_extremes.index = ['Min CO2', 'Max CO2']
+show(co2_extremes, showIndex=True, paging=False, searching=False, info=False, style="width:100%")
+```
+
+### Column
+
+```{python}
+#| title: "GDP Extremes"
+gdp_min_idx = df['gdp'].idxmin()
+gdp_max_idx = df['gdp'].idxmax()
+gdp_extremes = df.loc[[gdp_min_idx, gdp_max_idx], ['country', 'year', 'gdp', 'co2']].copy()
+gdp_extremes.index = ['Min GDP', 'Max GDP']
+show(gdp_extremes, showIndex=True, paging=False, searching=False, info=False, style="width:100%")
+```
+
+## Row {height="450px"}
+
+```{python}
+#| title: "GDP vs CO2 Emissions"
+fig = px.scatter(
+    year_data,
+    x="gdp", y="co2", color="country",
+    text="country", log_y=True,
+    size=[20] * len(year_data), size_max=20,
+    labels={"co2": "CO2 (metric tons per capita)", "gdp": "GDP (USD per capita)", "country": "Country"},
+    title=f"Year: {selected_year}"
+)
+_ = fig.update_traces(textposition="top center", textfont_size=9)
+_ = fig.update_layout(showlegend=False)
+fig.show()
+```
+
+## Row {height="350px"}
+
+### Column
+
+```{python}
+#| title: "CO2 Emissions by Country"
+bar_data = year_data.sort_values('co2', ascending=True)
+fig = px.bar(
+    bar_data, x='co2', y='country', orientation='h', color='country',
+    labels={'co2': 'CO2 (metric tons per capita)', 'country': ''},
+    title=f"Year: {selected_year}"
+)
+_ = fig.update_layout(showlegend=False)
+fig.show()
+```
+
+### Column
+
+```{python}
+#| title: "GDP by Country"
+bar_data = year_data.sort_values('gdp', ascending=True)
+fig = px.bar(
+    bar_data, x='gdp', y='country', orientation='h', color='country',
+    labels={'gdp': 'GDP (USD per capita)', 'country': ''},
+    title=f"Year: {selected_year}"
+)
+_ = fig.update_layout(showlegend=False)
+fig.show()
+```
+
+## Row {height="60px"}
+
+Data source: [Our World in Data – CO2 and Greenhouse Gas Emissions](https://github.com/owid/co2-data/tree/master) | Created with Quarto

@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "co2-gdp-dashboard"
+version = "0.1.0"
+description = "CO2 & GDP Dashboard - Analysis of relationship between CO2 emissions and GDP across countries"
+requires-python = ">=3.12"
+dependencies = [
+    "pandas>=2.0.0",
+    "plotly>=5.17.0",
+    "itables>=2.0.0",
+    "jupyter>=1.0.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "quarto>=1.5.0",
+    "jupyter>=1.0.0",
+    "ipython>=8.0.0",
+]
+
+[tool.setuptools]
+packages = []
