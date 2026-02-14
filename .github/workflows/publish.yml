@@ -38,17 +38,36 @@ jobs:
         run: |
           . .venv/bin/activate
           uv pip install -e .
+          echo "✓ Dependencies installed"
       
       - name: Install Quarto
         uses: quarto-dev/quarto-actions/setup@v2
       
+      - name: Verify Quarto installation
+        run: quarto --version
+      
       - name: Render Quarto document
         run: |
           . .venv/bin/activate
-          quarto render co2-gdp_db_quarto_sol.qmd --to html
+          echo "Current directory:"
+          pwd
+          echo "Files before render:"
+          ls -la
+          echo "Rendering..."
+          quarto render co2-gdp_db_quarto_sol.qmd --to html -v
+          echo "Files after render:"
+          ls -la
       
       - name: Rename output to index.html
-        run: mv co2-gdp_db_quarto_sol.html index.html
+        run: |
+          if [ -f _output/co2-gdp_db_quarto_sol.html ]; then
+            mv _output/co2-gdp_db_quarto_sol.html _output/index.html
+            echo "✓ Renamed to index.html"
+          else
+            echo "ERROR: _output/co2-gdp_db_quarto_sol.html not found!"
+            ls -la _output/
+            exit 1
+          fi
       
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -56,7 +75,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: '_output/'
       
       - name: Deploy to GitHub Pages
         id: deployment
