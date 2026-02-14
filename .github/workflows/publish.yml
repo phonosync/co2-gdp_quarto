@@ -60,12 +60,12 @@ jobs:
       
       - name: Rename output to index.html
         run: |
-          if [ -f _output/co2-gdp_db_quarto_sol.html ]; then
-            mv _output/co2-gdp_db_quarto_sol.html _output/index.html
+          if [ -f co2-gdp_db_quarto_sol.html ]; then
+            mv co2-gdp_db_quarto_sol.html index.html
             echo "✓ Renamed to index.html"
           else
-            echo "ERROR: _output/co2-gdp_db_quarto_sol.html not found!"
-            ls -la _output/
+            echo "ERROR: co2-gdp_db_quarto_sol.html not found!"
+            ls -la
             exit 1
           fi
       
@@ -75,7 +75,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '_output/'
+          path: '.'
       
       - name: Deploy to GitHub Pages
         id: deployment

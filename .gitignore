@@ -41,7 +41,6 @@ env/
 .quarto/
 _freeze/
 _site/
-_output/
 *.html
 co2-gdp_db_quarto_sol_files/
 
