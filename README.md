@@ -1,40 +1,29 @@
-# CO2 & GDP Dashboard
+# Sample Quarto Dashboard on the CO2-GDP Dataset
 
-A Quarto dashboard analyzing the relationship between CO2 emissions and GDP across countries.
+A Quarto dashboard that uses the CO2-GDP dataset to visualize the relationship between CO2 emissions and GDP. Uses Plotly for interactive visualizations.
 
-## Project Structure
+The app is deployed on GitHub Pages at https://phonosync.github.io/co2-gdp_quarto/
 
-- **co2-gdp_db_quarto_sol.qmd** - Main Quarto dashboard source file
-- **co2-gdp_db_quarto_sol.html** - Rendered HTML dashboard (auto-generated)
-- **pyproject.toml** - Python project dependencies
+## Data
 
-## Getting Started
+The dataset is sourced from [Our World in Data – CO2 and Greenhouse Gas Emissions](https://github.com/owid/co2-data/tree/master).
 
-### Prerequisites
+## Setup
+[Install Quarto](https://quarto.org/docs/get-started/)
 
-- Python 3.12
-- [uv](https://github.com/astral-sh/uv) package manager
-- [Quarto](https://quarto.org/)
+Dependencies are managed with [uv](https://docs.astral.sh/uv/) via `pyproject.toml` and `uv.lock`.
 
-### Setup
+Install uv (if not already installed):
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
 
-1. **Initialize the Python environment:**
-   ```bash
-   uv venv --python 3.12
-   ```
+Create the virtual environment and install dependencies:
+```bash
+uv sync
+```
 
-2. **Activate the environment:**
-   ```bash
-   source .venv/bin/activate  # On macOS/Linux
-   .venv\Scripts\activate     # On Windows
-   ```
-
-3. **Install dependencies:**
-   ```bash
-   uv pip install -r pyproject.toml
-   ```e .
-
-## Building the Dashboard
+Building the Dashboard locally:
 
 ```bash
 quarto render co2-gdp_db_quarto_sol.qmd
@@ -42,9 +31,13 @@ quarto render co2-gdp_db_quarto_sol.qmd
 
 This generates the HTML dashboard in `co2-gdp_db_quarto_sol.html`.
 
-## Deployment
+For interactive development and automatic build upon file change:
 
-### GitHub Pages
+```bash
+quarto preview co2-gdp_db_quarto_sol.qmd
+```
+
+## Deployment on GitHub Pages
 
 This project is configured for automatic deployment to GitHub Pages via GitHub Actions.
 
@@ -68,21 +61,12 @@ The dashboard will be published at: `https://<your-username>.github.io/<reposito
 
 No manual build steps needed - just push and the site updates automatically!
 
-## Data Requirements
-
-The project expects the following data structure in the `data/` directory:
-- `co2_gdp/co2_gdp_country.csv` - Country-level CO2 and GDP data
-- `natural_earth/110m_cultural/ne_110m_admin_0_countries.shp` - Ge
-- **plotly** - Interactive visualizations
-- **python-dotenv** - Environment variable management
-
-## Notes
-
-- The dashboard renders as a static HTML file with interactive Plotly visualizations
-- No Shiny server is required - the output is pure HTML with JavaScript interactivity via Plotly
+## Documentation
+- [Plotly](https://plotly.com/python/)
+- [Quarto Dashboards](https://quarto.org/docs/dashboards/)
+- Deployment of Quarto documents to [GitHub Pages](https://quarto.org/docs/publishing/github-pages.html)
+- [uv Documentation](https://docs.astral.sh/uv/)
 
 ## License
 
-[Add license information if appl and CSV reading
-- **plotly** - Interactive visualizations
-[Add author information if applicable]
+This project is licensed under the [CC BY-NC 4.0](LICENSE) license.
