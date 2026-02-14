@@ -41,8 +41,7 @@ env/
 .quarto/
 _freeze/
 _site/
-*.html
-co2-gdp_db_quarto_sol_files/
+_output/
 
 # Jupyter
 .ipynb_checkpoints/
