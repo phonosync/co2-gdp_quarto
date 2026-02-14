@@ -47,7 +47,8 @@ jobs:
           . .venv/bin/activate
           quarto render co2-gdp_db_quarto_sol.qmd --to html
       
-      - name: Setup Pages
+      - name: Rename output to index.html
+        run: mv co2-gdp_db_quarto_sol.html index.html
         uses: actions/configure-pages@v5
       
       - name: Upload artifact
