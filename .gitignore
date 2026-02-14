@@ -55,3 +55,6 @@ Thumbs.db
 
 # Dependencies
 .uv/
+
+/.quarto/
+**/*.quarto_ipynb
