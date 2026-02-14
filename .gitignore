@@ -42,6 +42,8 @@ env/
 _freeze/
 _site/
 _output/
+*_files/
+*.html
 
 # Jupyter
 .ipynb_checkpoints/
