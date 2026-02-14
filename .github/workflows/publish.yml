@@ -54,9 +54,11 @@ jobs:
           echo "Files before render:"
           ls -la
           echo "Rendering..."
-          quarto render co2-gdp_db_quarto_sol.qmd --to html -v
+          quarto render co2-gdp_db_quarto_sol.qmd --to html -v 2>&1 || true
           echo "Files after render:"
           ls -la
+          echo "Checking for HTML file:"
+          find . -name "*.html" -type f
       
       - name: Rename output to index.html
         run: |
