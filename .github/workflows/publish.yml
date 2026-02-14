@@ -49,25 +49,22 @@ jobs:
       - name: Render Quarto document
         run: |
           . .venv/bin/activate
-          echo "Current directory:"
-          pwd
-          echo "Files before render:"
-          ls -la
           echo "Rendering..."
-          quarto render co2-gdp_db_quarto_sol.qmd --to html -v 2>&1 || true
+          quarto render co2-gdp_db_quarto_sol.qmd --output-dir . 2>&1 || true
           echo "Files after render:"
-          ls -la
-          echo "Checking for HTML file:"
-          find . -name "*.html" -type f
+          ls -lah
+          echo "Looking for HTML files:"
+          find . -maxdepth 1 -name "*.html" -type f
       
-      - name: Rename output to index.html
+      - name: Check if HTML exists and rename
         run: |
           if [ -f co2-gdp_db_quarto_sol.html ]; then
+            echo "✓ Found co2-gdp_db_quarto_sol.html"
             mv co2-gdp_db_quarto_sol.html index.html
             echo "✓ Renamed to index.html"
           else
-            echo "ERROR: co2-gdp_db_quarto_sol.html not found!"
-            ls -la
+            echo "ERROR: HTML not found after render"
+            ls -lah
             exit 1
           fi
       
